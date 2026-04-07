@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Управление пользователями{% endblock %}
+{% block content %}
+<div style="display:flex; justify-content:space-between; margin-bottom:20px;">
+    <h2>Пользователи системы</h2>
+    <button class="btn btn-primary" onclick="document.getElementById('addUserModal').style.display='block'">+ Добавить пользователя</button>
+</div>
+<table class="data-table">
+    <thead>
+        <tr><th>ID</th><th>Логин</th><th>ФИО</th><th>Роль</th><th>Статус</th><th>Действие</th></tr>
+    </thead>
+    <tbody>
+        {% for u in items %}
+        <tr>
+            <td>{{ u.user_id }}</td>
+            <td>{{ u.login }}</td>
+            <td>{{ u.full_name }}</td>
+            <td>{{ u.role_name }}</td>
+            <td>{{ 'Активен' if u.is_active else 'Заблокирован' }}</td>
+            <td>
+                {% if u.user_id != session.user_id %}
+                <a href="{{ url_for('user_toggle', uid=u.user_id) }}" class="btn btn-sm {{ 'btn-danger' if u.is_active else 'btn-primary' }}">
+                    {{ 'Блок' if u.is_active else 'Разблок' }}
+                </a>
+                {% else %}
+                <span style="font-size:0.8rem; color:#999">Вы</span>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<!-- Простое модальное окно (без JS библиотек) -->
+<div id="addUserModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:100;">
+    <div class="form-box" style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%);">
+        <h3>Новый пользователь</h3>
+        <form method="POST" action="{{ url_for('user_add') }}">
+            <div class="form-group"><label>Логин</label><input name="login" required></div>
+            <div class="form-group"><label>Пароль</label><input type="password" name="password" required></div>
+            <div class="form-group"><label>ФИО</label><input name="name" required></div>
+            <div class="form-group">
+                <label>Роль</label>
+                <select name="role" required>
+                    {% for r in roles %}<option value="{{ r.role_id }}">{{ r.role_name }}</option>{% endfor %}
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Создать</button>
+            <button type="button" class="btn btn-danger" onclick="document.getElementById('addUserModal').style.display='none'">Отмена</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

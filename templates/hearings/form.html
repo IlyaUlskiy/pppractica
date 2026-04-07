@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Добавление заседания{% endblock %}
+{% block content %}
+<div class="form-box">
+    <form method="POST">
+        <div class="form-group"><label>Дата и время *</label><input type="datetime-local" name="date" required></div>
+        <div class="form-group"><label>Наименование суда *</label><input name="court" required></div>
+        <div class="form-group"><label>Номер зала *</label><input name="room" required></div>
+        <div class="form-group"><label>ФИО Судьи</label><input name="judge"></div>
+        <div class="form-group"><label>Результат (итог)</label><textarea name="result"></textarea></div>
+        <button type="submit" class="btn btn-primary">Сохранить</button>
+    </form>
+</div>
+{% endblock %}

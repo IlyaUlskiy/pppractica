@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ИС Учёт дел | {{ self.title() }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+{% if request.endpoint != 'login' %}
+<div class="app-container">
+    <aside class="sidebar">
+        <h2>⚖️ LegalDB</h2>
+        <nav>
+            <a href="{{ url_for('dashboard') }}" class="nav-link {% if request.endpoint == 'dashboard' %}active{% endif %}">📊 Дашборд</a>
+            <a href="{{ url_for('clients_list') }}" class="nav-link">👥 Клиенты</a>
+            <a href="{{ url_for('cases_list') }}" class="nav-link">📁 Дела</a>
+            {% if session.role_id == 1 %}
+            <a href="{{ url_for('users_list') }}" class="nav-link">🔑 Пользователи</a>
+            <details style="margin-top:15px; color:#CBD5E1;">
+                <summary style="cursor:pointer; padding:5px 0;">📖 Справочники</summary>
+                <a href="{{ url_for('refs_manage', table_name='roles') }}" class="nav-link" style="font-size:0.85rem; padding-left:25px;">Роли</a>
+                <a href="{{ url_for('refs_manage', table_name='client_types') }}" class="nav-link" style="font-size:0.85rem; padding-left:25px;">Типы клиентов</a>
+                <a href="{{ url_for('refs_manage', table_name='case_statuses') }}" class="nav-link" style="font-size:0.85rem; padding-left:25px;">Статусы дел</a>
+                <a href="{{ url_for('refs_manage', table_name='case_categories') }}" class="nav-link" style="font-size:0.85rem; padding-left:25px;">Категории</a>
+                <a href="{{ url_for('refs_manage', table_name='document_types') }}" class="nav-link" style="font-size:0.85rem; padding-left:25px;">Типы документов</a>
+            </details>
+            {% endif %}
+        </nav>
+    </aside>
+{% endif %}
+
+<main class="{% if request.endpoint != 'login' %}main-content{% else %}login-page{% endif %}">
+    {% if request.endpoint != 'login' %}
+    <div class="header">
+        <h1>{{ self.title() }}</h1>
+        <div class="user-info">
+            <span>{{ session.full_name }}</span>
+            <span class="badge">{{ ['Админ', 'Делопроизв.', 'Юрист'][session.role_id-1] }}</span>
+            <a href="{{ url_for('logout') }}" class="btn btn-sm btn-danger">Выход</a>
+        </div>
+    </div>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, msg in messages %}
+          <div class="flash {{ category }}">{{ msg }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+    {% endif %}
+
+    {% block content %}{% endblock %}
+</main>
+
+{% if request.endpoint != 'login' %}
+</div>
+{% endif %}
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

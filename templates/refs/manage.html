@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Справочник: {{ table }}{% endblock %}
+{% block content %}
+<h2 style="margin-bottom:20px;">Справочник: {{ table.replace('_', ' ').title() }}</h2>
+<div style="margin-bottom:20px; display:flex; gap:10px;">
+    <form method="POST" action="{{ url_for('ref_add', table_name=table) }}" style="display:flex; gap:10px;">
+        <input type="text" name="val" placeholder="Новое значение..." required style="padding:8px; border:1px solid #ccc; border-radius:4px;">
+        <button type="submit" class="btn btn-sm btn-primary">Добавить</button>
+    </form>
+</div>
+<table class="data-table">
+    <thead><tr>
+        {% for col in cols %} <th>{{ col[0] }}</th> {% endfor %}
+        <th>Действие</th>
+    </tr></thead>
+    <tbody>
+        {% for item in items %}
+        <tr>
+            {% for col in cols %}
+                <td>{{ item[col[0]] }}</td>
+            {% endfor %}
+            <td>
+                <!-- Получаем ID (обычно первая колонка) для удаления -->
+                <a href="{{ url_for('ref_del', table_name=table, rid=item[cols[0][0]]) }}" class="btn btn-sm btn-danger" onclick="return confirm('Удалить запись?')">Удалить</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<a href="{{ url_for('dashboard') }}" style="display:inline-block; margin-top:20px;">← Назад</a>
+{% endblock %}

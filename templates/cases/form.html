@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Регистрация дела{% endblock %}
+{% block content %}
+<div class="form-box">
+    <h3 style="margin-bottom:15px;">Регистрация нового судебного дела</h3>
+    <form method="POST" onsubmit="return confirm('Подтвердите создание дела');">
+        <div class="form-group">
+            <label>Клиент *</label>
+            <select name="client_id" required>
+                <option value="">Выберите клиента из справочника</option>
+                {% for cl in clients %}
+                <option value="{{ cl.client_id }}">{{ cl.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Ответственный юрист *</label>
+            <select name="lawyer_id" required>
+                {% for l in lawyers %}
+                <option value="{{ l.user_id }}">{{ l.full_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Категория дела *</label>
+            <select name="category_id" required>
+                {% for c in cats %}
+                <option value="{{ c.category_id }}">{{ c.category_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Суть требований / Предмет спора *</label>
+            <textarea name="subject" rows="4" placeholder="Краткое описание сути дела..." required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Зарегистрировать дело</button>
+        <a href="{{ url_for('cases_list') }}" class="btn btn-danger" style="margin-left:10px;">Отмена</a>
+    </form>
+</div>
+{% endblock %}

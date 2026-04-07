@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Добавление' if mode=='add' else 'Редактирование' }} клиента{% endblock %}
+{% block content %}
+<div class="form-box">
+    <h3 style="margin-bottom:15px;">{{ 'Добавление' if mode=='add' else 'Редактирование' }} клиента</h3>
+    <form method="POST">
+        <div class="form-group">
+            <label>Тип клиента *</label>
+            <select name="type_id" required>
+                {% for t in types %}
+                <option value="{{ t.type_id }}" {% if data and data.type_id == t.type_id %}selected{% endif %}>{{ t.type_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label>ФИО / Наименование *</label>
+            <input type="text" name="name" value="{{ data.name if data else '' }}" required>
+        </div>
+        <div class="form-group">
+            <label>ИНН</label>
+            <input type="text" name="inn" value="{{ data.inn if data else '' }}">
+        </div>
+        <div class="form-group">
+            <label>Телефон *</label>
+            <input type="tel" name="phone" value="{{ data.phone if data else '' }}" required>
+        </div>
+        <div class="form-group">
+            <label>Email</label>
+            <input type="email" name="email" value="{{ data.email if data else '' }}">
+        </div>
+        <div class="form-group">
+            <label>Адрес</label>
+            <textarea name="address" rows="2">{{ data.address if data else '' }}</textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">{{ 'Сохранить' if mode=='edit' else 'Создать' }}</button>
+        <a href="{{ url_for('clients_list') }}" class="btn btn-danger" style="margin-left:10px;">Отмена</a>
+    </form>
+</div>
+{% endblock %}

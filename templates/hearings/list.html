@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Заседания по делу {{ case.case_number if case else '' }}{% endblock %}
+{% block content %}
+<h2>Заседания по делу: {{ case.case_number }}</h2>
+<div style="margin:15px 0;">
+    <a href="{{ url_for('hearing_add', case_id=case_id) }}" class="btn btn-primary">+ Запланировать заседание</a>
+</div>
+<table class="data-table">
+    <thead><tr><th>Дата/Время</th><th>Суд</th><th>Зал</th><th>Судья</th><th>Результат</th></tr></thead>
+    <tbody>
+        {% for h in items %}
+        <tr>
+            <td>{{ h.hearing_date }}</td>
+            <td>{{ h.court_name }}</td>
+            <td>{{ h.courtroom }}</td>
+            <td>{{ h.judge_name }}</td>
+            <td>{{ h.result or '—' }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<a href="{{ url_for('cases_list') }}">← К списку дел</a>
+{% endblock %}

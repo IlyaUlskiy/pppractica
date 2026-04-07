@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Реестр дел{% endblock %}
+{% block content %}
+<table class="data-table">
+    <thead><tr><th>Номер</th><th>Клиент</th><th>Юрист</th><th>Статус</th><th>Категория</th><th>Дата</th><th>Действия</th></tr></thead>
+    <tbody>
+        {% for c in items %}
+        <tr>
+            <td><b>{{ c.case_number }}</b></td>
+            <td>{{ c.client_name }}</td>
+            <td>{{ c.lawyer_name }}</td>
+            <td><span class="badge" style="background:{{ ['#9E9E9E','#2196F3','#FF9800','#4CAF50','#F44336'][c.status_id-1] }}">{{ c.status_name }}</span></td>
+            <td>{{ c.category_name }}</td>
+            <td>{{ c.start_date }}</td>
+            <td>
+                <a href="{{ url_for('case_edit', case_id=c.case_id) }}" class="btn btn-sm btn-primary">✏️ Изменить</a>
+                <a href="{{ url_for('hearings', case_id=c.case_id) }}" class="btn btn-sm">Заседания</a>
+                <a href="{{ url_for('docs', case_id=c.case_id) }}" class="btn btn-sm">Документы</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

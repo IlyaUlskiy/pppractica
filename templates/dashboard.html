@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Главная панель{% endblock %}
+{% block content %}
+<div class="stats-grid">
+    {% for s in stats %}
+    <div class="stat-card">
+        <h3>{{ s.status_name }}</h3>
+        <p>{{ s.cnt }}</p>
+    </div>
+    {% endfor %}
+    <div class="stat-card" style="border-left-color: #F57F17;">
+        <h3>Новых клиентов (мес)</h3>
+        <p>{{ new_clients }}</p>
+    </div>
+</div>
+<div class="form-box">
+    <h3 style="margin-bottom:15px;">Быстрые действия</h3>
+    <a href="{{ url_for('client_add') }}" class="btn btn-primary">+ Новый клиент</a>
+    <a href="{{ url_for('case_add') }}" class="btn btn-primary">+ Зарегистрировать дело</a>
+</div>
+{% endblock %}
